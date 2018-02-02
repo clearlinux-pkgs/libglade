@@ -4,7 +4,7 @@
 #
 Name     : libglade
 Version  : 2.6.4
-Release  : 1
+Release  : 2
 URL      : http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/libglade-2.6.4.tar.bz2
 Source0  : http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/libglade-2.6.4.tar.bz2
 Summary  : libglade library
