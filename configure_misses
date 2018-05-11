@@ -1,2 +1,3 @@
 Configure miss: Win32 platform in general
+Configure miss: a Python interpreter with version >= 2.0
 Configure miss: XML catalog (/etc/xml/catalog)

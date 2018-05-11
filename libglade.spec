@@ -4,13 +4,12 @@
 #
 Name     : libglade
 Version  : 2.6.4
-Release  : 3
+Release  : 4
 URL      : http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/libglade-2.6.4.tar.bz2
 Source0  : http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/libglade-2.6.4.tar.bz2
 Summary  : libglade library
 Group    : Development/Tools
 License  : LGPL-2.0
-Requires: libglade-bin
 Requires: libglade-lib
 Requires: libglade-doc
 Requires: libglade-data
@@ -32,15 +31,6 @@ recompilation of the program.
 
 The interfaces can also be edited with GLADE.
 
-%package bin
-Summary: bin components for the libglade package.
-Group: Binaries
-Requires: libglade-data
-
-%description bin
-bin components for the libglade package.
-
-
 %package data
 Summary: data components for the libglade package.
 Group: Data
@@ -53,7 +43,6 @@ data components for the libglade package.
 Summary: dev components for the libglade package.
 Group: Development
 Requires: libglade-lib
-Requires: libglade-bin
 Requires: libglade-data
 Provides: libglade-devel
 
@@ -86,9 +75,9 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1508451013
+export SOURCE_DATE_EPOCH=1526059561
 %configure --disable-static
-make V=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 
 %check
 export LANG=C
@@ -98,16 +87,12 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1508451013
+export SOURCE_DATE_EPOCH=1526059561
 rm -rf %{buildroot}
 %make_install
 
 %files
 %defattr(-,root,root,-)
-
-%files bin
-%defattr(-,root,root,-)
-/usr/bin/libglade-convert
 
 %files data
 %defattr(-,root,root,-)
