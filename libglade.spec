@@ -4,15 +4,16 @@
 #
 Name     : libglade
 Version  : 2.6.4
-Release  : 7
+Release  : 8
 URL      : http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/libglade-2.6.4.tar.bz2
 Source0  : http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/libglade-2.6.4.tar.bz2
 Summary  : libglade library
 Group    : Development/Tools
 License  : LGPL-2.0
-Requires: libglade-lib
-Requires: libglade-doc
-Requires: libglade-data
+Requires: libglade-data = %{version}-%{release}
+Requires: libglade-lib = %{version}-%{release}
+Requires: libglade-license = %{version}-%{release}
+BuildRequires : buildreq-gnome
 BuildRequires : docbook-xml
 BuildRequires : gettext
 BuildRequires : gtk-doc
@@ -42,9 +43,10 @@ data components for the libglade package.
 %package dev
 Summary: dev components for the libglade package.
 Group: Development
-Requires: libglade-lib
-Requires: libglade-data
-Provides: libglade-devel
+Requires: libglade-lib = %{version}-%{release}
+Requires: libglade-data = %{version}-%{release}
+Provides: libglade-devel = %{version}-%{release}
+Requires: libglade = %{version}-%{release}
 
 %description dev
 dev components for the libglade package.
@@ -61,35 +63,57 @@ doc components for the libglade package.
 %package lib
 Summary: lib components for the libglade package.
 Group: Libraries
-Requires: libglade-data
+Requires: libglade-data = %{version}-%{release}
+Requires: libglade-license = %{version}-%{release}
 
 %description lib
 lib components for the libglade package.
 
 
+%package license
+Summary: license components for the libglade package.
+Group: Default
+
+%description license
+license components for the libglade package.
+
+
 %prep
 %setup -q -n libglade-2.6.4
+cd %{_builddir}/libglade-2.6.4
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1526059561
-%configure --disable-static
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1604624184
+export GCC_IGNORE_WERROR=1
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
+%reconfigure --disable-static
 make  %{?_smp_mflags}
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1526059561
+export SOURCE_DATE_EPOCH=1604624184
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/libglade
+cp %{_builddir}/libglade-2.6.4/COPYING %{buildroot}/usr/share/package-licenses/libglade/5fb362ef1680e635fe5fb212b55eef4db9ead48f
 %make_install
+## Remove excluded files
+rm -f %{buildroot}/usr/bin/libglade-convert
 
 %files
 %defattr(-,root,root,-)
@@ -109,7 +133,7 @@ rm -rf %{buildroot}
 /usr/lib64/pkgconfig/libglade-2.0.pc
 
 %files doc
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/gtk-doc/html/libglade/GladeXML.html
 /usr/share/gtk-doc/html/libglade/home.png
 /usr/share/gtk-doc/html/libglade/index.html
@@ -136,3 +160,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 /usr/lib64/libglade-2.0.so.0
 /usr/lib64/libglade-2.0.so.0.0.7
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/libglade/5fb362ef1680e635fe5fb212b55eef4db9ead48f
